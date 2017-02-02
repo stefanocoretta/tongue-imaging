@@ -8,7 +8,7 @@ output:
     highlight: tango
     latex_engine: xelatex
     number_sections: yes
-    template: template.tex
+geometry: margin=1.5in
 ---
 
 ```{r setup, include=FALSE}
