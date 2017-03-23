@@ -128,14 +128,13 @@ cons.gestures <- raw.data %>%
     left_join(y = stimuli, by = c("word" = "orth"))
 ```
 
-Let's plot closure duration as a function of place of articulation and voicing of C2 (our target consonant in C1VC2V words). Since in the original data the values of the release for velar consonants are missing, we will plot values only from the coronal consonants.
+Let's plot closure duration as a function of place of articulation of C2 (our target consonant in C1VC2V words). Since in the original data the values of the release for velar consonants are missing, the plot is not very informative in this case.
 
 ```{r closure-duration}
-filter(cons.gestures, c2place == "coronal") %>%
-ggplot(aes(c2phonation, closure)) +
+ggplot(cons.gestures, aes(c2place, closure)) +
     geom_violin() +
     geom_boxplot(width=0.2) +
-    xlab("phonation of C2") +
+    xlab("place of C2") +
     ylab("closure duration (msec)")
 ```
 
