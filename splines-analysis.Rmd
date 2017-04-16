@@ -107,9 +107,9 @@ ggplot(aes(x = X, y = Y, colour = c2phonation)) +
 ```
 
 
-# Consonantal gestures: target, maximum, release
+# Consonantal gestures
 
-Now we can create a separate data frame where the observational unit is each word and the variables are the consonantal gestures (target, maximum closure, release).
+Now we can create a separate data frame where the observational unit is each word and the variables are the consonantal gestures (nucleus onset, maximum constriction, nucleus offset).
 
 ```{r gestures}
 cons.gestures <- raw.data %>%
@@ -124,12 +124,12 @@ cons.gestures <- raw.data %>%
 
 Let's plot closure duration as a function of place of articulation of C2 (our target consonant in C1VC2V words).
 
-```{r closure-duration}
+```{r nucleus-duration}
 ggplot(cons.gestures, aes(c2place, nucleus)) +
     geom_violin() +
     geom_boxplot(width=0.2) +
     xlab("place of C2") +
-    ylab("closure duration (msec)")
+    ylab("nucleus duration (msec)")
 ```
 
 
