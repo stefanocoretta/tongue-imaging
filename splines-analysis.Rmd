@@ -2,8 +2,8 @@
 title: "AAA spline data tidying and plotting"
 author: "Stefano Coretta"
 date: \today
-output: 
-  pdf_document: 
+output:
+  pdf_document:
     fig_caption: yes
     highlight: tango
     latex_engine: xelatex
@@ -50,7 +50,7 @@ columns <- c(
 We can now import the spline data (`SC01-aaa.txt`) and the stimuli database (`nonce.csv`).
 
 ```{r read}
-raw.data <- read_delim("./data/SC01-aaa.csv", 
+raw.data <- read_delim("./data/SC01-aaa.csv",
     "\t", escape_double = FALSE,
     col_names = columns,
     na = "*",
@@ -112,7 +112,7 @@ ggplot(aes(x = X, y = Y, colour = c2phonation)) +
 
 # Consonantal gestures: target, maximum, release
 
-Now we can create a separate data frame where the observasional unit is each word and the variables are the consonantal getures (target, maximum closure, release).
+Now we can create a separate data frame where the observational unit is each word and the variables are the consonantal gestures (target, maximum closure, release).
 
 ```{r gestures}
 cons.gestures <- raw.data %>%
