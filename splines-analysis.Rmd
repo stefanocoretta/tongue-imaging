@@ -26,19 +26,17 @@ Before importing the data, we need to specify the column names for the data set 
 ```{r col-names}
 num.splines <- 42
 columns <- c(
-    "subject",
+    "speaker",
     "seconds",
     "rec.date",
     "prompt",
     "label",
-    "TD.displacement",
-    "TT.displacement",
-    "TD.displacement.sm",
-    "TD.velocity",
-    "TD.velocity.abs",
     "TT.displacement.sm",
     "TT.velocity",
     "TT.velocity.abs",
+    "TD.displacement.sm",
+    "TD.velocity",
+    "TD.velocity.abs",
 #   ^^^^^ CHANGE ABOVE ^^^^^
     paste0(rep(c("X", "Y"), num.splines),
             "_",
@@ -50,12 +48,12 @@ columns <- c(
 We can now import the spline data (`SC01-aaa.txt`) and the stimuli database (`nonce.csv`).
 
 ```{r read}
-raw.data <- read_delim("./data/SC01-aaa.csv",
-    "\t", escape_double = FALSE,
+raw.data <- read_tsv("./data/sc01-aaa.csv",
     col_names = columns,
     na = "*",
     trim_ws = TRUE
-    )
+    ) %>%
+    mutate_at(vars(matches("^[XY]_")),funs(as.numeric))
 
 rm(num.splines, columns)
 
@@ -72,7 +70,7 @@ splines <- raw.data %>%
     separate(spline, c("axis", "fan"), convert = TRUE) %>%
     spread(axis, coordinate) %>%
     mutate(word = as.factor(word(prompt, 2))) %>%
-    left_join(y = stimuli, by = c("word" = "orth"))
+    left_join(y = stimuli)
 ```
 
 # Some plotting
@@ -80,8 +78,9 @@ splines <- raw.data %>%
 We can finally create some plots.
 
 ```{r splines}
-ggplot(splines, aes(x = X, y = Y, group = rec.date, colour = c2place)) +
-    geom_smooth(size = 0.5, alpha = 0.2, se = FALSE) +
+filter(splines, vowel == "a") %>%
+ggplot(aes(x = X, y = Y, group = rec.date, colour = c2place)) +
+    geom_smooth(method = "loess", size = 0.5, alpha = 0.2, se = FALSE) +
     coord_fixed(ratio = 1) +
     xlab("antero-posterior") +
     ylab("supero-inferior")
@@ -92,7 +91,7 @@ Plot the tongue shape for velar consonants at the moment of maximum constriction
 ```{r velar}
 filter(splines, label == "max_TD") %>%
 ggplot(aes(x = X, y = Y, colour = c2phonation)) +
-    geom_smooth(method = "loess") +
+    geom_smooth(method = "loess", se = FALSE) +
     coord_fixed(ratio = 1) +
     xlab("antero-posterior") +
     ylab("supero-inferior")
@@ -103,7 +102,7 @@ Plot the tongue shape for coronal consonants at the moment of maximum constricti
 ```{r coronal}
 filter(splines, label == "max_TT") %>%
 ggplot(aes(x = X, y = Y, colour = c2phonation)) +
-    geom_smooth(method = "loess") +
+    geom_smooth(method = "loess", se = FALSE) +
     coord_fixed(ratio = 1) +
     xlab("antero-posterior") +
     ylab("supero-inferior")
@@ -116,19 +115,19 @@ Now we can create a separate data frame where the observational unit is each wor
 
 ```{r gestures}
 cons.gestures <- raw.data %>%
-    select(subject:label) %>%
+    select(speaker:label) %>%
     separate(label, c("gesture", "tongue.area")) %>%
     spread(gesture, seconds) %>%
-    select(subject:tongue.area, target, max, release) %>%
-    mutate(closure = (release - target) * 1000) %>%
+    select(speaker:tongue.area, NONS, max, NOFF) %>%
+    mutate(nucleus = (NOFF - NONS) * 1000) %>%
     mutate(word = as.factor(word(prompt, 2))) %>%
-    left_join(y = stimuli, by = c("word" = "orth"))
+    left_join(y = stimuli)
 ```
 
-Let's plot closure duration as a function of place of articulation of C2 (our target consonant in C1VC2V words). Since in the original data the values of the release for velar consonants are missing, the plot is not very informative in this case.
+Let's plot closure duration as a function of place of articulation of C2 (our target consonant in C1VC2V words).
 
 ```{r closure-duration}
-ggplot(cons.gestures, aes(c2place, closure)) +
+ggplot(cons.gestures, aes(c2place, nucleus)) +
     geom_violin() +
     geom_boxplot(width=0.2) +
     xlab("place of C2") +
