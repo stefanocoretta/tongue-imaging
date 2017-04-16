@@ -57,8 +57,6 @@ raw.data <- read_tsv("./data/sc01-aaa.csv",
 
 rm(num.splines, columns)
 
-raw.data <- unique(raw.data)
-
 stimuli <- read.csv("./data/nonce.csv")
 ```
 
