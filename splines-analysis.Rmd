@@ -14,12 +14,9 @@ geometry: margin=1.5in
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir=normalizePath("./"))
-library(readr)
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(ggplot2)
+library(tidyverse)
 theme_set(theme_bw())
+library(stringr)
 ```
 
 # Data import
