@@ -80,8 +80,8 @@ splines <- raw.data %>%
 We can finally create some plots.
 
 ```{r splines}
-ggplot(splines, aes(x = X, y = Y, group = word, colour = c2place)) +
-    geom_smooth(size = 0.5, alpha = 0.2) +
+ggplot(splines, aes(x = X, y = Y, group = rec.date, colour = c2place)) +
+    geom_smooth(size = 0.5, alpha = 0.2, se = FALSE) +
     coord_fixed(ratio = 1) +
     xlab("antero-posterior") +
     ylab("supero-inferior")
