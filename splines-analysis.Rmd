@@ -48,7 +48,7 @@ columns <- c(
 We can now import the spline data (`SC01-aaa.txt`) and the stimuli database (`nonce.csv`).
 
 ```{r read}
-raw.data <- read_tsv("./data/sc01-aaa.csv",
+raw.data <- read_tsv("./data/sc01-aaa.tsv",
     col_names = columns,
     na = "*",
     trim_ws = TRUE
