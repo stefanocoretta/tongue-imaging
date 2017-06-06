@@ -60,7 +60,7 @@ rm(num.lines, columns)
 stimuli <- read.csv("./data/nonce.csv")
 ```
 
-The following code applies [tidy formatting] to the data frame. It uses functions from the `tidyr` library.
+The following code applies [tidy formatting] to the data frame. It uses functions from the `tidyr` and `stringr` packages.
 
 ```{r tidy}
 splines <- raw.data %>%
